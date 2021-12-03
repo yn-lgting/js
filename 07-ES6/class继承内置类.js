@@ -8,5 +8,5 @@ class MyArray extends Array {
 }
 
 const arr = new MyArray(1, 2, 3)
-console.log(arr.firstItem()) // 1
-console.log(arr.lastItem()) // 3
+console.log(arr.firstItem()) // result: 1
+console.log(arr.lastItem()) // result: 3
