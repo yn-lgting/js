@@ -15,4 +15,3 @@ class Student extends Person {
 
 const s1 = new Student('gt', 19, 1001)
 console.log(s1)
-console.log()
