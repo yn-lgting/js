@@ -112,5 +112,114 @@ console.log(key)
 
 
 
+### 8. Set数据类型
 
+* 基本了解
+
+  1. es6之前存储数据的结构主要是通过：数组-对象来存储
+
+  2. es6新增了Set和Map，以及他们另外形式WeakSet和WeakMap
+
+* 基本使用
+  1. Set数据结构可以用来保存数据， 类似数组，不同的是Set数据类型中的数据是不能重复的
+  2. 通过 new Set(可迭代对象) 创建以一个set数据类型的变量
+* 利用Set给数组去重
+  1. const newArr = Array.from(new Set([]))
+  2. const newArr2 = [...new Set([])]
+
+```js
+/**
+ * 数据结构：存储数据的格式
+ * es6之前只有数组和对象去存储数据
+ * es6之后新增了Set数据结构， 跟数组类似，但是它里面不允许出现相同的元素
+ * 可以调用Set构造函数传入一个可迭代对象，来创建一个set数据类型的值
+ */
+
+const initSet = new Set([1, 2, 3])
+initSet.add(1)
+// console.log(initSet)
+
+// 利用Set数据类型给数组去重
+
+const arr = [1, 2, 3, 3, 2, 1]
+const newArr = [...new Set(arr)]
+const newArr2 = Array.from(new Set(arr))
+console.log(newArr2)
+
+```
+
+
+
+* Set常用属性和方法
+
+  1. .size属性: 获取Set数据长度
+  2. 添加一个变量： .add(value)
+  3. 删除某个变量： .delete(value) 需要制定变量，不支持长度或索引删除
+  4. 清空Set：.clear() 
+  5. 遍历 forEach(callBack, thisArg) 或者 for(const item of set)
+
+* weakSet 
+
+  1. cosnt weakSet = new WakeSet()
+  2. weakSet内部只能存储对象
+  3. weakSet对对象的应用是弱引用， 会被GC回收掉
+
+  4. 对应方法有 weakSet.add() weakSet.delete() weakSet.has()'
+  5. weakSet类型不能被遍历
+
+### 9. Map数据类型
+
+* 基本了解
+
+  1. 在es6之前， 对象属性的key只能是字符串， es6之后可以利用symbol给对象添加key
+  2. 而map数据类型可以是一个对象， 用于存储映射关系
+
+* 基本使用 跟map类似
+
+  ```js
+  const obj = { name: 'gt'}
+  const obj1 = { name: 'gt1'}
+  const obj2 = { name: 'gt2'}
+  
+  // 创建map
+  const map = new Map()
+  
+  // 获取map大小
+  console.log(map.size)
+  
+  // 添加属性 map.set(key, value)
+  map.set(obj, '111')
+  map.set(obj1, '222')
+  map.set(obj2, '333')
+  console.log(map)
+  
+  // 获取属性 map.get(key)
+  console.log(map.get(obj))
+  
+  // 是否包含某个属性 返回boolean
+  console.log(map.has(obj))
+  
+  // 删除属性 map.delete(key) 返回boolean
+  map.delete(obj)
+  console.log(map)
+  
+  // 清空属性 map.clear()
+  
+  // 遍历map
+  map.forEach((item, key) => {
+    console.log(item, key)
+  })
+  
+  for(const item of map) {
+    console.log(item) // 打印出来类类似于 [key, value]
+  }
+  
+  // 直接数组结构 key value
+  for(const [key, value ] of map) {
+    console.log(key, value)
+  }
+  
+  ```
+
+  
 
