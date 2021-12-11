@@ -174,7 +174,7 @@ console.log(newArr2)
   1. 在es6之前， 对象属性的key只能是字符串， es6之后可以利用symbol给对象添加key
   2. 而map数据类型可以是一个对象， 用于存储映射关系
 
-* 基本使用 跟map类似
+* 基本使用 跟set类似
 
   ```js
   const obj = { name: 'gt'}
@@ -221,5 +221,9 @@ console.log(newArr2)
   
   ```
 
-  
+* WeakMap
+
+  1. WeakMap的key值只能是对象
+  2. key值对该对象的引用是一个弱引用， 是会被GC回收掉的
+  3. 有set get has方法 无法遍历
 
