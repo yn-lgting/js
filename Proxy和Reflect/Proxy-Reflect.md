@@ -101,4 +101,129 @@ console.log(obj.name)
 
   ![avatar](./image/捕获器.png)
 
-  
+3. 监听函数对象操作
+
+   * 函数也是对象， 可以通过apply捕获器和construct捕获器捕获。 注意：不是constructor
+   * apply监听函数被调用[并非必须是apply调用]
+   * construct 监听函数被new调用
+
+   ```js
+   /**
+    * 函数也是一个对象，Proxy提供了 apply， constructor捕获器
+    * apply 函数被调用时的捕获器
+    * constructor 函数被new调用时的捕获器
+    *  */ 
+   
+   function foo() {
+     console.log('foo被调用')
+   }
+   
+   const proxyFoo = new Proxy(foo, {
+     apply: function(target, thisArg, args) { // target 函数对象， thisArg 函数中的this， args 函数的参数
+       console.log('监听到函数被apply调用')
+       console.log(target, thisArg, args)
+       return target.apply(thisArg, thisArg, args)
+     },
+     construct: function(target, args, newTarget) { // target 函数对象， args 函数的参数， newTarget 代理函数对象
+       console.log('监听到函数被new关键字调用')
+       console.log(target, args, newTarget)
+       return new target(...args)
+     }
+   })
+   
+   proxyFoo.call({name: 'gt'}, [1, 2, 3])
+   new proxyFoo(1, 2)
+   ```
+
+
+
+### 3. Reflect
+
+* Reflect是es6新增的api， 是一个对象
+* Reflect提供了很多操作对象的方法，类似Object
+* 为什么需要Reflect对象
+  * 早期ECMA规范中没有考虑 到对对象本身的操作如何设计会更规范，直接将操作对象的API放在了Object上面
+  * Object是一个构造函数， 把所有的操作全部放在Object上面可能不太合适
+  * ES6新增了Reflect，希望操作对象都集中在Reflect上面
+* 常见方法
+  * Reflect.getPrototypeOf(target) 
+  * Reflect.setPrototypeOf(target, prototype)
+    * 该方法返回一个Boolean，设置成功为true反之false
+  * Reflect.isExtensibel(target)
+  * Reflect.preventExtensions(target)
+  * Reflect.getOwnPropertyDiscription(target, key)
+    * 返回该属性描述符，否则返回undefined
+  * Reflect.defineProperty(target, key, {disctiptions})
+    * 返回Boolean
+  * Reflect.ownKeys(target)
+    * 返回一个包含所有自身属性的数组[不包含继承属性]
+    * 不受描述符 enumerable影响
+  * Reflect.has(target, key)
+    * 判断对象是否存在某个属性
+  * Reflect.get(target, key, receiver)
+    * 返回Boolean
+  * Reflect.set(target, key, receiver)
+    * 返回Boolean
+  * Reflect.deleteProperty(target, key, receiver)
+  * Reflect.apply(target, thisArg, args)
+  * Reflect.construct(target, args, newTarget)
+
+```js
+const obj = {
+  name: 'gt'
+}
+
+const proxyObj = new Proxy(obj, {
+  get: function (target, key) {
+    console.log('获取属性')
+    return Reflect.get(target, key)
+  },
+  set: function(target, key, value) {
+    console.log('设置属性')
+    return Reflect.set(target, key, value)
+  }
+})
+
+proxyObj.name = 'gtt'
+console.log(proxyObj.name)
+
+```
+
+
+
+* receiver的作用
+
+  * 修改getter setter的this
+
+    ```js
+    const obj = {
+      _name: 'tm',
+      get name() {
+        return this._name
+      },
+      set name(value) {
+        return this._name = value
+      }
+    }
+    
+    const proxyObj = new Proxy(obj, {
+      get(target, key, receiver) {
+        console.log(target, key, receiver) // 被代理对象，key， 代理对象
+        console.log(key)
+        return Reflect.get(target, key, receiver)
+    
+        /**
+         * 当获取name时， 会触发get方法，以下写法会跳过代理对象，直接去被代理对象中获取name，失去代理意义
+         * receiver则代表代理对象，传入receiver方法后，被代理对象里的this会变成代理对象，从而触发代理对象的get name,
+         * 传入receive之后， 会触发两次get捕获器， 一次为代理对象触发被代理对象的getname， 一次为被代理对象触发getname
+         */
+        // return Reflect.get(target, key) 
+      }
+    })
+    
+    console.log(proxyObj.name)
+    ```
+
+    
+
+    
