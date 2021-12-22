@@ -99,7 +99,7 @@ console.log(obj.name)
 
 * proxy所有捕获器
 
-  ![avatar](./image/捕获器.png)
+  ![avatar](../08-Proxy和Reflect/image/捕获器.png)
 
 3. 监听函数对象操作
 
