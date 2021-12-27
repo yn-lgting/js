@@ -95,19 +95,23 @@ class YnPromise {
     return new YnPromise((resolve, reject) => {
       const result = []
       promises.forEach(promise => {
-        promise.then((value) => {
-          result.push({
-            status: 'fulfilled',
-            value,
-          }) 
-          if (result.length === promises.length) return resolve(result)
-        }, (reason) => {
-          result.push({
-            status: 'rejected',
-            reason
+        try {
+          promise.then((value) => {
+            result.push({
+              status: 'fulfilled',
+              value,
+            }) 
+            if (result.length === promises.length) return resolve(result)
+          }, (reason) => {
+            result.push({
+              status: 'rejected',
+              reason
+            })
+            if (result.length === promises.length) return resolve(result)
           })
-          if (result.length === promises.length) return resolve(result)
-        })
+        } catch(err) {
+          reject(err)
+        }
       })
     })
   }
@@ -144,16 +148,17 @@ const p2 = new YnPromise((resolve, reject) => {
 })
 const p3 = new YnPromise((resolve, reject) => {
   // reject('err2')
-  resolve('success2')
+  // resolve('success2')
+  throw new Error('err')
 })
 
-YnPromise.all([p1, p2, p3]).then((res) => {
-  console.log(res)
-}, (err) => {
-  console.log(err)
-})
-// YnPromise.allSettled([p1, p2, p3]).then((res) => {
+// YnPromise.all([p1, p2, p3]).then((res) => {
 //   console.log(res)
 // }, (err) => {
 //   console.log(err)
 // })
+YnPromise.allSettled([p1, p2, p3]).then((res) => {
+  console.log(res)
+}, (err) => {
+  console.log(err)
+})
