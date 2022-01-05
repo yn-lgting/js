@@ -12,10 +12,10 @@ class YnPromise {
       if (this.status === PROMISE_PENDING) {
         this.status = PROMISE_FULFILLED
         this.value = value
-        queueMicrotask(() => {
+        // queueMicrotask(() => {
           this.onFulfilledFns.forEach((onFulfilled) => {
             onFulfilled(value)
-          })
+          // })
         })
       }
     }
@@ -23,10 +23,10 @@ class YnPromise {
       if (this.status === PROMISE_PENDING) {
         this.status = PROMISE_REJECTED
         this.reason = reason
-        queueMicrotask(() => {
+        // queueMicrotask(() => {
           this.onRejectedFns.forEach((onRejected) => {
             onRejected(reason)
-          })
+          // })
         })
       }
     }
@@ -95,11 +95,11 @@ function catchFnError(fn, value, resolve, reject) {
 }
 
 const promise = new YnPromise((resolve, reject) => {
-  // setTimeout(() => {
+  setTimeout(() => {
     resolve('success')
     // reject('error')
     // throw new Error('err message')
-  // })
+  })
 })
 promise.then((res) => {
   console.log('res:', res)
