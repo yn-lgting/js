@@ -4,6 +4,7 @@ const obj = {
   [s1]: 'abc'
 }
 console.log(obj[s1])
+console.log(obj)
 obj[s1] = 'cba'
 
 // 可以通过传递描述符, 通过实例.description可以获取到描述符
@@ -36,3 +37,12 @@ console.log(s4 === s5) // true
 // 获取symbol的key
 const key = Symbol.keyFor(s4)
 console.log(key)
+
+const ss = Symbol('xxx')
+const ss2 = Symbol('xxx')
+const symbolObj = {
+  [ss]: 'hello'
+}
+console.log(symbolObj[ss])
+console.log(symbolObj[ss2])
+console.log(ss === ss2)
